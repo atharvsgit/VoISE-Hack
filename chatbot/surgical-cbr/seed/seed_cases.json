@@ -1,0 +1,78 @@
+[
+  {
+    "case_id": 1,
+    "title": "Radial Forearm Flap for Hand Reconstruction",
+    "age": 45,
+    "sex": "M",
+    "bmi": 24.5,
+    "smoker": false,
+    "defect_length_cm": 8.5,
+    "donor_site": "radial forearm",
+    "technique_summary": "Radial forearm free flap harvested with 12cm pedicle length. Anastomosis to radial artery and cephalic vein. Primary closure of donor site with split-thickness skin graft.",
+    "complications": "Minor wound dehiscence at donor site, resolved with local care",
+    "notes": "Patient had excellent vascular anatomy. Post-op Doppler monitoring showed good flow.",
+    "outcome_rating": 4,
+    "imaging_meta": "CT angiogram showed patent radial artery, no anomalies"
+  },
+  {
+    "case_id": 2,
+    "title": "Anterolateral Thigh Flap for Lower Leg Defect",
+    "age": 62,
+    "sex": "F",
+    "bmi": 28.3,
+    "smoker": true,
+    "defect_length_cm": 15.0,
+    "donor_site": "anterolateral thigh",
+    "technique_summary": "ALT flap harvested as musculocutaneous flap, 18x12cm. Perforator-based design. Anastomosis to posterior tibial vessels. Donor site closed primarily.",
+    "complications": "Partial flap loss (20%) requiring debridement and secondary closure",
+    "notes": "Smoking history may have contributed to complications. Patient counseled on smoking cessation.",
+    "outcome_rating": 3,
+    "imaging_meta": "MRI showed adequate perforator anatomy. Pre-op Doppler mapping performed"
+  },
+  {
+    "case_id": 3,
+    "title": "Latissimus Dorsi Flap for Chest Wall Reconstruction",
+    "age": 38,
+    "sex": "M",
+    "bmi": 22.1,
+    "smoker": false,
+    "defect_length_cm": 12.0,
+    "donor_site": "latissimus dorsi",
+    "technique_summary": "Pedicled latissimus dorsi myocutaneous flap, 15x10cm. Tunneled subcutaneously to anterior chest. No microvascular anastomosis required.",
+    "complications": null,
+    "notes": "Excellent functional outcome. Patient returned to full activity at 6 weeks.",
+    "outcome_rating": 5,
+    "imaging_meta": "Chest CT showed adequate muscle bulk. No vascular anomalies"
+  },
+  {
+    "case_id": 4,
+    "title": "Gracilis Muscle Flap for Perineal Reconstruction",
+    "age": 55,
+    "sex": "F",
+    "bmi": 26.8,
+    "smoker": false,
+    "defect_length_cm": 6.0,
+    "donor_site": "gracilis",
+    "technique_summary": "Gracilis muscle flap harvested from right thigh. Transposed to perineal defect. Split-thickness skin graft applied over muscle.",
+    "complications": "Superficial infection treated with antibiotics",
+    "notes": "Good coverage achieved. Patient satisfied with cosmetic result.",
+    "outcome_rating": 4,
+    "imaging_meta": "Pre-op MRI confirmed adequate gracilis muscle volume"
+  },
+  {
+    "case_id": 5,
+    "title": "Fibula Free Flap for Mandibular Reconstruction",
+    "age": 48,
+    "sex": "M",
+    "bmi": 25.7,
+    "smoker": true,
+    "defect_length_cm": 10.0,
+    "donor_site": "fibula",
+    "technique_summary": "Fibula osteocutaneous free flap, 12cm bone segment with 8x6cm skin paddle. Anastomosis to facial artery and vein. Mandibular reconstruction plate applied.",
+    "complications": "Delayed wound healing at recipient site, no flap loss",
+    "notes": "Smoking cessation program initiated pre-operatively. Patient reduced but did not quit completely.",
+    "outcome_rating": 3,
+    "imaging_meta": "CT angiogram showed three-vessel runoff in leg. Pre-op vascular mapping performed"
+  }
+]
+
