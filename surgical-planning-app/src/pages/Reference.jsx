@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Book, BookOpen, Clock, ChevronRight } from 'lucide-react';
 
 const chapters = [
@@ -100,166 +99,89 @@ export default function Reference() {
   const [lastRead, setLastRead] = useState(null);
 
   useEffect(() => {
-    // Load last read chapter from localStorage
-    const savedChapter = localStorage.getItem('lastReadChapter');
-    if (savedChapter) {
-      setLastRead(parseInt(savedChapter));
+    const stored = localStorage.getItem('lastReadChapter');
+    if (stored) {
+      const parsed = parseInt(stored, 10);
+      setSelectedChapter(parsed);
+      setLastRead(parsed);
     }
   }, []);
 
   useEffect(() => {
-    // Save current chapter to localStorage
     localStorage.setItem('lastReadChapter', selectedChapter.toString());
+    setLastRead(selectedChapter);
   }, [selectedChapter]);
-
-  const handleContinueReading = () => {
-    if (lastRead) {
-      setSelectedChapter(lastRead);
-    }
-  };
 
   const currentContent = chapterContent[selectedChapter] || chapterContent[1];
 
   return (
-    <div className="h-screen bg-[#0d1117] flex">
-      {/* Table of Contents */}
-      <motion.div
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        className="w-80 bg-[#161b22] border-r border-[#30363d] flex flex-col overflow-hidden"
-      >
-        <div className="p-6 border-b border-[#30363d]">
+    <div className="h-screen bg-gray-50 flex">
+      <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3 mb-4">
-            <Book className="w-6 h-6 text-[#1f6feb]" />
-            <h2 className="text-lg font-semibold text-[#f1f5f9]">
-              Surgical Reference
-            </h2>
+            <Book className="w-5 h-5 text-gray-600" />
+            <div>
+              <p className="text-xs uppercase text-gray-500">Reference</p>
+              <h2 className="text-lg font-semibold text-gray-900">Surgical manual</h2>
+            </div>
           </div>
-
-          {lastRead && lastRead !== selectedChapter && (
-            <motion.button
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleContinueReading}
-              className="w-full flex items-center gap-2 bg-[#1f6feb]/10 border border-[#1f6feb]/20 text-[#1f6feb] px-4 py-2.5 rounded-md text-sm font-medium hover:bg-[#1f6feb]/20 transition-colors"
+          {lastRead && (
+            <button
+              type="button"
+              onClick={() => setSelectedChapter(lastRead)}
+              className="w-full inline-flex items-center gap-2 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700"
             >
               <Clock className="w-4 h-4" />
-              Continue Reading Chapter {lastRead}
-            </motion.button>
+              Continue at chapter {lastRead}
+            </button>
           )}
         </div>
+        <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+          {chapters.map((chapter) => (
+            <button
+              key={chapter.id}
+              type="button"
+              onClick={() => setSelectedChapter(chapter.id)}
+              className={`w-full text-left border rounded-md px-3 py-2 ${
+                selectedChapter === chapter.id ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-200 bg-white text-gray-800'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">{chapter.title}</p>
+                {lastRead === chapter.id && <Clock className="w-4 h-4 text-gray-400" />}
+              </div>
+              <ul className="mt-2 space-y-1 text-xs text-gray-500">
+                {chapter.sections.map((section) => (
+                  <li key={section} className="flex items-center gap-1">
+                    <ChevronRight className="w-3 h-3" />
+                    {section}
+                  </li>
+                ))}
+              </ul>
+            </button>
+          ))}
+        </nav>
+      </aside>
 
-        <div className="flex-1 overflow-y-auto p-4">
-          <nav className="space-y-1">
-            {chapters.map((chapter) => (
-              <motion.button
-                key={chapter.id}
-                whileHover={{ x: 4 }}
-                onClick={() => setSelectedChapter(chapter.id)}
-                className={`w-full text-left p-3 rounded-md transition-colors ${
-                  selectedChapter === chapter.id
-                    ? 'bg-[#1f6feb]/10 border border-[#1f6feb]/20'
-                    : 'hover:bg-[#21262d]'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono text-[#8b949e]">
-                        {chapter.id.toString().padStart(2, '0')}
-                      </span>
-                      <h3 className="text-sm font-medium text-[#f1f5f9]">
-                        {chapter.title}
-                      </h3>
-                    </div>
-                    <ul className="mt-2 space-y-1">
-                      {chapter.sections.map((section, idx) => (
-                        <li
-                          key={idx}
-                          className="text-xs text-[#8b949e] pl-6 flex items-center gap-1"
-                        >
-                          <ChevronRight className="w-3 h-3" />
-                          {section}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {lastRead === chapter.id && (
-                    <Clock className="w-4 h-4 text-[#1f6feb] flex-shrink-0" />
-                  )}
-                </div>
-              </motion.button>
-            ))}
-          </nav>
-        </div>
-      </motion.div>
-
-      {/* Reading Area */}
-      <div className="flex-1 overflow-y-auto">
-        <motion.div
-          key={selectedChapter}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="max-w-4xl mx-auto px-8 py-12"
-        >
-          {/* Chapter Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-[#8b949e] text-sm mb-3">
+      <main className="flex-1 overflow-y-auto bg-white">
+        <div className="max-w-4xl mx-auto px-8 py-10 space-y-6">
+          <div className="border-b border-gray-200 pb-4">
+            <div className="flex items-center gap-2 text-sm text-gray-500 uppercase tracking-wide">
               <BookOpen className="w-4 h-4" />
-              <span>Chapter {selectedChapter}</span>
+              Chapter {selectedChapter}
             </div>
-            <h1 className="text-3xl font-semibold text-[#f1f5f9] mb-2">
-              {currentContent.title}
-            </h1>
-            <div className="h-1 w-16 bg-[#1f6feb] rounded-full"></div>
+            <h1 className="text-3xl font-semibold text-gray-900 mt-2">{currentContent.title}</h1>
+            <div className="w-12 h-1 bg-gray-900 mt-4" />
           </div>
-
-          {/* Chapter Content */}
-          <div className="prose prose-invert max-w-none">
-            <div className="text-[#c9d1d9] leading-relaxed space-y-6">
-              {currentContent.content.split('\n\n').map((paragraph, idx) => (
-                <motion.p
-                  key={idx}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="text-[15px] leading-7"
-                >
-                  {paragraph}
-                </motion.p>
-              ))}
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div className="mt-12 pt-8 border-t border-[#30363d] flex items-center justify-between">
-            {selectedChapter > 1 && (
-              <motion.button
-                whileHover={{ x: -4 }}
-                onClick={() => setSelectedChapter(selectedChapter - 1)}
-                className="flex items-center gap-2 text-[#8b949e] hover:text-[#f1f5f9] transition-colors"
-              >
-                <ChevronRight className="w-4 h-4 rotate-180" />
-                <span className="text-sm">Previous Chapter</span>
-              </motion.button>
-            )}
-            <div className="flex-1"></div>
-            {selectedChapter < chapters.length && (
-              <motion.button
-                whileHover={{ x: 4 }}
-                onClick={() => setSelectedChapter(selectedChapter + 1)}
-                className="flex items-center gap-2 text-[#8b949e] hover:text-[#f1f5f9] transition-colors"
-              >
-                <span className="text-sm">Next Chapter</span>
-                <ChevronRight className="w-4 h-4" />
-              </motion.button>
-            )}
-          </div>
-        </motion.div>
-      </div>
+          <article className="prose prose-sm max-w-none text-gray-800">
+            {currentContent.content.split('\n\n').map((paragraph, idx) => (
+              <p key={idx} className="text-base leading-7 text-gray-700">
+                {paragraph}
+              </p>
+            ))}
+          </article>
+        </div>
+      </main>
     </div>
   );
 }

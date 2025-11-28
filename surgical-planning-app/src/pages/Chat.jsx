@@ -1,260 +1,203 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Plus, MessageSquare, User, Bot, Trash2 } from 'lucide-react';
 
 export default function Chat() {
-  const [conversations, setConversations] = useState([
-    { id: 1, title: 'ACL Reconstruction Query', timestamp: '2024-11-28' }
-  ]);
+  const [conversations, setConversations] = useState([{ id: 1, title: 'ACL Reconstruction', timestamp: '2024-11-28' }]);
   const [activeConversation, setActiveConversation] = useState(1);
   const [messages, setMessages] = useState([
     {
       id: 1,
       role: 'assistant',
-      content: 'Hello! I\'m your surgical planning assistant. I can help answer questions about procedures, patient cases, and medical protocols. How can I assist you today?',
-      timestamp: new Date().toISOString()
-    }
+      content: 'Hello. I can help with surgical planning, case review, and protocol questions.',
+      timestamp: new Date().toISOString(),
+    },
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!inputMessage.trim()) return;
-
     const userMessage = {
       id: messages.length + 1,
       role: 'user',
-      content: inputMessage,
-      timestamp: new Date().toISOString()
+      content: inputMessage.trim(),
+      timestamp: new Date().toISOString(),
     };
-
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
     setIsTyping(true);
 
-    // Simulate AI response
     setTimeout(() => {
       const botMessage = {
-        id: messages.length + 2,
+        id: userMessage.id + 1,
         role: 'assistant',
-        content: generateMockResponse(inputMessage),
-        timestamp: new Date().toISOString()
+        content: generateMockResponse(),
+        timestamp: new Date().toISOString(),
       };
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-    }, 1500);
-  };
-
-  const generateMockResponse = (query) => {
-    const responses = [
-      'Based on the latest surgical guidelines, here\'s what I recommend...',
-      'For this type of procedure, typical preparation includes...',
-      'The success rate for this intervention is approximately 94% based on recent studies...',
-      'Key considerations for this case would include patient age, medical history, and...',
-      'Post-operative care typically involves a 6-week recovery period with...'
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    }, 900);
   };
 
   const handleNewConversation = () => {
-    const newConv = {
-      id: conversations.length + 1,
-      title: `New Conversation ${conversations.length + 1}`,
-      timestamp: new Date().toISOString().split('T')[0]
+    const newId = conversations.length + 1;
+    const newConversation = {
+      id: newId,
+      title: `Conversation ${newId}`,
+      timestamp: new Date().toISOString().split('T')[0],
     };
-    setConversations([...conversations, newConv]);
-    setActiveConversation(newConv.id);
+    setConversations((prev) => [...prev, newConversation]);
+    setActiveConversation(newId);
     setMessages([
       {
         id: 1,
         role: 'assistant',
-        content: 'Hello! How can I assist you with surgical planning today?',
-        timestamp: new Date().toISOString()
-      }
+        content: 'New conversation created. How can I help?',
+        timestamp: new Date().toISOString(),
+      },
     ]);
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+  const handleClear = () => {
+    setMessages([
+      {
+        id: 1,
+        role: 'assistant',
+        content: 'Conversation cleared. Ask your question to begin.',
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
       handleSend();
     }
   };
 
   return (
-    <div className="h-screen bg-[#0d1117] flex">
-      {/* Sidebar - Conversation History */}
-      <motion.div
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        className="w-64 bg-[#161b22] border-r border-[#30363d] flex flex-col"
-      >
-        <div className="p-4 border-b border-[#30363d]">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+    <div className="h-screen bg-gray-50 flex">
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <button
+            type="button"
             onClick={handleNewConversation}
-            className="w-full flex items-center justify-center gap-2 bg-[#1f6feb] text-white py-2.5 rounded-md font-medium hover:bg-[#1a5dd9] transition-colors"
+            className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 rounded-md text-sm font-semibold text-gray-700"
           >
             <Plus className="w-4 h-4" />
-            New Conversation
-          </motion.button>
+            New conversation
+          </button>
         </div>
-
-        <div className="flex-1 overflow-y-auto p-3 space-y-2">
-          {conversations.map((conv) => (
-            <motion.button
-              key={conv.id}
-              whileHover={{ x: 4 }}
-              onClick={() => setActiveConversation(conv.id)}
-              className={`w-full text-left p-3 rounded-md transition-colors ${
-                activeConversation === conv.id
-                  ? 'bg-[#1f6feb]/10 border border-[#1f6feb]/20'
-                  : 'hover:bg-[#21262d]'
+        <div className="flex-1 overflow-y-auto">
+          {conversations.map((conversation) => (
+            <button
+              key={conversation.id}
+              type="button"
+              onClick={() => setActiveConversation(conversation.id)}
+              className={`w-full text-left px-4 py-3 flex items-center gap-3 border-b border-gray-100 ${
+                activeConversation === conversation.id ? 'bg-gray-100' : 'bg-white hover:bg-gray-50'
               }`}
             >
-              <div className="flex items-start gap-2">
-                <MessageSquare className="w-4 h-4 text-[#8b949e] mt-0.5 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-[#f1f5f9] truncate">{conv.title}</p>
-                  <p className="text-xs text-[#8b949e] mt-1">{conv.timestamp}</p>
-                </div>
+              <MessageSquare className="w-4 h-4 text-gray-500" />
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{conversation.title}</p>
+                <p className="text-xs text-gray-500">{conversation.timestamp}</p>
               </div>
-            </motion.button>
+            </button>
           ))}
         </div>
-      </motion.div>
+      </aside>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-[#161b22] border-b border-[#30363d] px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-lg font-semibold text-[#f1f5f9]">
-                Surgical Assistant Chat
-              </h1>
-              <p className="text-sm text-[#8b949e] mt-0.5">
-                AI-powered medical consultation
-              </p>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-2 hover:bg-[#21262d] rounded-md transition-colors"
-            >
-              <Trash2 className="w-5 h-5 text-[#8b949e]" />
-            </motion.button>
+      <section className="flex-1 flex flex-col">
+        <header className="border-b border-gray-200 bg-white px-6 py-4 flex items-center justify-between">
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide">Assistant</p>
+            <h1 className="text-lg font-semibold text-gray-900">Clinical chat</h1>
+            <p className="text-sm text-gray-500">For internal use within the surgical team.</p>
           </div>
-        </div>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="inline-flex items-center gap-2 text-sm text-gray-600 border border-gray-300 rounded-md px-3 py-2"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear
+          </button>
+        </header>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          <AnimatePresence>
-            {messages.map((message, index) => (
-              <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4 bg-gray-50">
+          {messages.map((message) => (
+            <div key={message.id} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+              {message.role === 'assistant' && (
+                <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white">
+                  <Bot className="w-4 h-4 text-gray-600" />
+                </div>
+              )}
+              <div
+                className={`max-w-xl rounded-md px-4 py-3 text-sm leading-relaxed ${
+                  message.role === 'user'
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-white border border-gray-200 text-gray-800'
+                }`}
               >
-                {message.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-full bg-[#1f6feb]/10 border border-[#1f6feb]/20 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-[#1f6feb]" />
-                  </div>
-                )}
-                <div
-                  className={`max-w-2xl rounded-md p-4 ${
-                    message.role === 'user'
-                      ? 'bg-[#1f6feb] text-white'
-                      : 'bg-[#161b22] border border-[#30363d] text-[#c9d1d9]'
-                  }`}
-                >
-                  <p className="text-sm leading-relaxed">{message.content}</p>
-                  <p
-                    className={`text-xs mt-2 ${
-                      message.role === 'user' ? 'text-blue-100' : 'text-[#8b949e]'
-                    }`}
-                  >
-                    {new Date(message.timestamp).toLocaleTimeString()}
-                  </p>
+                <p>{message.content}</p>
+                <p className="mt-2 text-xs text-gray-500">
+                  {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
+              {message.role === 'user' && (
+                <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white">
+                  <User className="w-4 h-4 text-gray-600" />
                 </div>
-                {message.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-[#30363d] flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 text-[#f1f5f9]" />
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </AnimatePresence>
-
+              )}
+            </div>
+          ))}
           {isTyping && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex gap-3"
-            >
-              <div className="w-8 h-8 rounded-full bg-[#1f6feb]/10 border border-[#1f6feb]/20 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-[#1f6feb]" />
-              </div>
-              <div className="bg-[#161b22] border border-[#30363d] rounded-md p-4">
-                <div className="flex gap-1">
-                  <motion.div
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ repeat: Infinity, duration: 1.2, delay: 0 }}
-                    className="w-2 h-2 bg-[#8b949e] rounded-full"
-                  />
-                  <motion.div
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ repeat: Infinity, duration: 1.2, delay: 0.2 }}
-                    className="w-2 h-2 bg-[#8b949e] rounded-full"
-                  />
-                  <motion.div
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ repeat: Infinity, duration: 1.2, delay: 0.4 }}
-                    className="w-2 h-2 bg-[#8b949e] rounded-full"
-                  />
-                </div>
-              </div>
-            </motion.div>
+            <div className="text-xs text-gray-500 flex items-center gap-2">
+              <Bot className="w-4 h-4 text-gray-500" />
+              Assistant is drafting a reply…
+            </div>
           )}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Area */}
-        <div className="bg-[#161b22] border-t border-[#30363d] p-4">
-          <div className="max-w-4xl mx-auto flex gap-3">
-            <input
-              type="text"
+        <footer className="border-t border-gray-200 bg-white px-6 py-4">
+          <div className="flex gap-3">
+            <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ask about procedures, cases, or medical protocols..."
-              className="flex-1 bg-[#0d1117] border border-[#30363d] rounded-md px-4 py-3 text-[#f1f5f9] placeholder-[#8b949e] focus:outline-none focus:border-[#1f6feb] focus:ring-1 focus:ring-[#1f6feb]"
+              onKeyDown={handleKeyDown}
+              placeholder="Document your question or case details…"
+              rows={2}
+              className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 resize-none"
             />
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
+              type="button"
               onClick={handleSend}
               disabled={!inputMessage.trim()}
-              className="bg-[#1f6feb] hover:bg-[#1a5dd9] text-white p-3 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-semibold disabled:opacity-60"
             >
-              <Send className="w-5 h-5" />
-            </motion.button>
+              <Send className="w-4 h-4" />
+            </button>
           </div>
-        </div>
-      </div>
+        </footer>
+      </section>
     </div>
   );
 }
 
+function generateMockResponse() {
+  const responses = [
+    'Consider reviewing imaging again before final fixation. Would you like a checklist?',
+    'Recommendation recorded. Ensure patient consent reflects the updated plan.',
+    'Refer to the enhanced recovery protocol for guidance on this case.',
+    'I noted a similar patient outcome last quarter with good results after early mobilization.',
+  ];
+  return responses[Math.floor(Math.random() * responses.length)];
+}

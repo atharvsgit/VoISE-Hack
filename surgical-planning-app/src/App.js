@@ -26,7 +26,7 @@ function PublicRoute({ children }) {
 function App() {
   return (
     <Router>
-      <div className="App min-h-screen bg-[#0d1117]">
+      <div className="App min-h-screen bg-gray-50">
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
@@ -40,8 +40,8 @@ function App() {
           <Route path="/patients" element={<ProtectedRoute><><Navbar /><Patients /></></ProtectedRoute>} />
           <Route path="/calendar" element={<ProtectedRoute><><Navbar /><Calendar /></></ProtectedRoute>} />
           <Route path="/new-case" element={<ProtectedRoute><><Navbar /><NewCase /></></ProtectedRoute>} />
-          <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-          <Route path="/reference" element={<ProtectedRoute><Reference /></ProtectedRoute>} />
+          <Route path="/chat" element={<ProtectedRoute><><Navbar /><Chat /></></ProtectedRoute>} />
+          <Route path="/reference" element={<ProtectedRoute><><Navbar /><Reference /></></ProtectedRoute>} />
         </Routes>
       </div>
     </Router>

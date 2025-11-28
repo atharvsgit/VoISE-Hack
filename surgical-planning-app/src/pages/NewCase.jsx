@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, User, Calendar, Clock, FileText, AlertCircle, CheckCircle, Upload } from 'lucide-react';
+import { Plus, User, Calendar, Clock, FileText, AlertCircle, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function NewCase() {
@@ -67,54 +67,52 @@ export default function NewCase() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-20 h-20 mx-auto mb-6 bg-emerald-500/20 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-12 h-12 text-emerald-400" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="text-center bg-white border border-gray-200 rounded-lg p-8">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-gray-300 flex items-center justify-center">
+            <CheckCircle className="w-8 h-8 text-gray-700" />
           </div>
-          <h2 className="text-3xl font-bold text-white mb-2">Case Created Successfully!</h2>
-          <p className="text-gray-400">Redirecting to dashboard...</p>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Case saved</h2>
+          <p className="text-sm text-gray-600">Redirecting to the dashboard…</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-3">
-            <Plus className="w-10 h-10 text-blue-400" />
-            New Surgical Case
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <div className="mb-8">
+          <p className="text-sm text-gray-500 uppercase tracking-wide">Case intake</p>
+          <h1 className="text-3xl font-semibold text-gray-900 flex items-center gap-3">
+            <Plus className="w-6 h-6 text-gray-600" />
+            New surgical case
           </h1>
-          <p className="text-gray-400">Create a new surgical planning case with patient details</p>
+          <p className="text-sm text-gray-500">Provide patient context and scheduling details.</p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Patient Information */}
-          <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-              <User className="w-6 h-6 text-blue-400" />
-              Patient Information
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <section className="bg-white border border-gray-200 rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <User className="w-5 h-5 text-gray-500" />
+              Patient information
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Patient Name <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Patient name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="patientName"
                   value={formData.patientName}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.patientName ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.patientName ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                   placeholder="John Doe"
                 />
                 {errors.patientName && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.patientName}
                   </p>
@@ -122,19 +120,19 @@ export default function NewCase() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Age <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Age <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
                   name="patientAge"
                   value={formData.patientAge}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.patientAge ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.patientAge ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                   placeholder="45"
                 />
                 {errors.patientAge && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.patientAge}
                   </p>
@@ -142,14 +140,14 @@ export default function NewCase() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Gender <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Gender <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="patientGender"
                   value={formData.patientGender}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.patientGender ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.patientGender ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                 >
                   <option value="">Select gender</option>
                   <option value="Male">Male</option>
@@ -157,7 +155,7 @@ export default function NewCase() {
                   <option value="Other">Other</option>
                 </select>
                 {errors.patientGender && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.patientGender}
                   </p>
@@ -165,38 +163,37 @@ export default function NewCase() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Medical History
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Medical history
                 </label>
                 <input
                   type="text"
                   name="medicalHistory"
                   value={formData.medicalHistory}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
                   placeholder="Diabetes, Hypertension..."
                 />
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Procedure Details */}
-          <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-              <FileText className="w-6 h-6 text-blue-400" />
-              Procedure Details
+          <section className="bg-white border border-gray-200 rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-gray-500" />
+              Procedure details
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Procedure Type <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Procedure type <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="procedure"
                   value={formData.procedure}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.procedure ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.procedure ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                 >
                   <option value="">Select procedure</option>
                   <option value="Total Knee Replacement">Total Knee Replacement</option>
@@ -209,7 +206,7 @@ export default function NewCase() {
                   <option value="Other">Other</option>
                 </select>
                 {errors.procedure && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.procedure}
                   </p>
@@ -217,14 +214,14 @@ export default function NewCase() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Surgeon <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Surgeon <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="surgeon"
                   value={formData.surgeon}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.surgeon ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.surgeon ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                 >
                   <option value="">Select surgeon</option>
                   <option value="Dr. Michael Chen">Dr. Michael Chen</option>
@@ -233,7 +230,7 @@ export default function NewCase() {
                   <option value="Dr. David Kim">Dr. David Kim</option>
                 </select>
                 {errors.surgeon && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.surgeon}
                   </p>
@@ -241,14 +238,14 @@ export default function NewCase() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Risk Level <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Risk level <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="riskLevel"
                   value={formData.riskLevel}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
                 >
                   <option value="low">Low Risk</option>
                   <option value="medium">Medium Risk</option>
@@ -256,29 +253,28 @@ export default function NewCase() {
                 </select>
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Schedule */}
-          <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-              <Calendar className="w-6 h-6 text-blue-400" />
+          <section className="bg-white border border-gray-200 rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-gray-500" />
               Schedule
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Date <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Date <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.date ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.date ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                 />
                 {errors.date && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.date}
                   </p>
@@ -286,18 +282,18 @@ export default function NewCase() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Time <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Time <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="time"
                   name="time"
                   value={formData.time}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.time ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.time ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                 />
                 {errors.time && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.time}
                   </p>
@@ -305,32 +301,31 @@ export default function NewCase() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Duration <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Duration <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="duration"
                   value={formData.duration}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 border ${errors.duration ? 'border-red-500' : 'border-gray-700'} rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                  className={`w-full px-3 py-2 border ${errors.duration ? 'border-red-400' : 'border-gray-300'} rounded-md text-gray-900`}
                   placeholder="e.g., 3h 30m"
                 />
                 {errors.duration && (
-                  <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     {errors.duration}
                   </p>
                 )}
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Notes */}
-          <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-              <FileText className="w-6 h-6 text-blue-400" />
-              Additional Notes
+          <section className="bg-white border border-gray-200 rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-gray-500" />
+              Additional notes
             </h2>
 
             <textarea
@@ -338,23 +333,22 @@ export default function NewCase() {
               value={formData.notes}
               onChange={handleChange}
               rows="4"
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              placeholder="Any additional notes or special considerations..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
+              placeholder="Special considerations, preparation notes…"
             ></textarea>
-          </div>
+          </section>
 
-          {/* Submit Buttons */}
-          <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="px-8 py-3 bg-gray-800 border border-gray-700 text-gray-300 font-semibold rounded-xl hover:bg-gray-700 transition-all"
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-semibold text-gray-700"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold rounded-xl transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
+              className="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-semibold flex items-center gap-2"
             >
               <CheckCircle className="w-5 h-5" />
               Create Case
