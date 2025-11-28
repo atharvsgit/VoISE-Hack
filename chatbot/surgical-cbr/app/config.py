@@ -14,18 +14,18 @@ DB_PATH = DB_DIR / "cases.db"
 SCHEMA_PATH = DB_DIR / "schema.sql"
 
 # Qdrant settings
-QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
+QDRANT_PATH = os.getenv("QDRANT_PATH", str(BASE_DIR / "qdrant_data"))
+QDRANT_HOST = os.getenv("QDRANT_HOST")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", "6333"))
 QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "surgical_cases")
 
-# OpenAI settings
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-OPENAI_EMBED_MODEL = "text-embedding-3-small"
-OPENAI_EMBED_DIMS = 1536
-
 # Gemini settings
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-pro")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "models/gemini-2.0-flash")
+
+# Embedding settings (Gemini)
+EMBED_MODEL = os.getenv("EMBED_MODEL", "models/text-embedding-004")
+EMBED_DIMS = int(os.getenv("EMBED_DIMS", "768"))
 
 # Retrieval settings
 RETRIEVAL_TOP_K = 20

@@ -1,10 +1,10 @@
 """Hybrid retrieval service (vector + feature scoring)."""
 from typing import List, Dict, Any
-from qdrant_client import QdrantClient
 from app.config import (
-    QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION,
+    QDRANT_COLLECTION,
     FEATURE_WEIGHT, EMBEDDING_WEIGHT
 )
+from app.services.qdrant_client import get_qdrant_client
 from app.services.embeddings import embed_text
 from app.db.case_store import build_blob_text
 
@@ -34,13 +34,15 @@ def retrieve_top_k(
     query_vector = embed_text(query_blob)
     
     # Query Qdrant for top 20
-    client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+    client = get_qdrant_client()
     
-    search_results = client.search(
+    search_response = client.query_points(
         collection_name=QDRANT_COLLECTION,
-        query_vector=query_vector,
-        limit=20
+        query=query_vector,
+        limit=20,
+        with_payload=True
     )
+    search_results = search_response.points
     
     # Compute hybrid scores
     scored_cases = []

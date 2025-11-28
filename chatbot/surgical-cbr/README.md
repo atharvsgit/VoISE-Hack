@@ -52,15 +52,24 @@ pip install -r requirements.txt
 2. **Set environment variables**:
 Create a `.env` file in the project root:
 ```
-OPENAI_API_KEY=your_openai_key
 GEMINI_API_KEY=your_gemini_key
-QDRANT_HOST=localhost
-QDRANT_PORT=6333
+# Optional overrides:
+# GEMINI_MODEL=models/gemini-2.0-flash      # default; ensure it exists for your API key
+# EMBED_MODEL=models/text-embedding-004
+# EMBED_DIMS=768
+# QDRANT_PATH=./qdrant_data          # default embedded storage path
+# QDRANT_HOST=remote-hostname        # use this to point at remote Qdrant
+# QDRANT_PORT=6333
 ```
+> Tip: run `python -c "import google.generativeai as genai; genai.configure(api_key='YOUR_KEY');\
+> print([m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods])"`
+> to see the exact model IDs available on your account, then set `GEMINI_MODEL` accordingly.
 
-3. **Start Qdrant** (if running locally):
+3. **Embedded Qdrant storage**:
+No Docker container is required. The API starts an embedded Qdrant instance automatically using the `qdrant-client[qdrant]` extra and stores data under `qdrant_data/` by default. Set `QDRANT_PATH` if you want a different location.  
+If you previously created a collection with 1536-d vectors (OpenAI embeddings), delete it before reseeding so Qdrant can create a new 768-d collection:
 ```bash
-docker run -p 6333:6333 qdrant/qdrant
+curl -X DELETE http://localhost:6333/collections/surgical_cases
 ```
 
 4. **Seed the database**:

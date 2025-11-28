@@ -1,5 +1,6 @@
 """Gemini LLM client for case-based reasoning."""
 import json
+from typing import List, Dict, Any
 import google.generativeai as genai
 from app.config import GEMINI_API_KEY, GEMINI_MODEL
 

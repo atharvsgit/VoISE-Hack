@@ -3,9 +3,9 @@ import sqlite3
 import json
 from typing import Dict, List, Optional, Any
 from pathlib import Path
-from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
-from app.config import DB_PATH, SCHEMA_PATH, QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION
+from app.config import DB_PATH, SCHEMA_PATH, QDRANT_COLLECTION, EMBED_DIMS, EMBED_MODEL
+from app.services.qdrant_client import get_qdrant_client
 
 
 def init_sqlite():
@@ -28,7 +28,7 @@ def init_sqlite():
 
 def init_qdrant():
     """Initialize Qdrant collection."""
-    client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+    client = get_qdrant_client()
     
     # Check if collection exists
     collections = client.get_collections().collections
@@ -38,7 +38,7 @@ def init_qdrant():
         client.create_collection(
             collection_name=QDRANT_COLLECTION,
             vectors_config=VectorParams(
-                size=1536,  # OpenAI text-embedding-3-small dimension
+                size=EMBED_DIMS,
                 distance=Distance.COSINE
             )
         )
@@ -160,7 +160,7 @@ def insert_case_with_cursor(
     
     # Upsert to Qdrant if vector provided
     if vector is not None:
-        client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+        client = get_qdrant_client()
         
         payload = {
             "case_id": case_id,
@@ -212,8 +212,8 @@ def batch_seed_from_json(seed_file: Path, embed_func):
         insert_case_with_cursor(
             case=case,
             blob_text=blob_text,
-            embed_model="text-embedding-3-small",
-            embed_dims=1536,
+            embed_model=EMBED_MODEL,
+            embed_dims=EMBED_DIMS,
             vector=vector
         )
         

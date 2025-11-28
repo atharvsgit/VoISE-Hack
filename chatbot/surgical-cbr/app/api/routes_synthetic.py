@@ -5,7 +5,7 @@ from app.services.synthetic import generate_synthetic_case
 from app.db import case_store
 from app.db.case_store import build_blob_text
 from app.services.embeddings import embed_text
-from app.db.case_store import build_blob_text
+from app.config import EMBED_MODEL, EMBED_DIMS
 
 router = APIRouter(prefix="/dream", tags=["synthetic"])
 
@@ -28,8 +28,8 @@ async def generate_synthetic(request: SyntheticCaseRequest):
         case_id = case_store.insert_case_with_cursor(
             case=case_dict,
             blob_text=blob_text,
-            embed_model="text-embedding-3-small",
-            embed_dims=1536,
+            embed_model=EMBED_MODEL,
+            embed_dims=EMBED_DIMS,
             vector=vector
         )
         

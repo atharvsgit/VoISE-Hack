@@ -1,15 +1,16 @@
-"""OpenAI embeddings service."""
+"""Gemini embeddings service."""
 from typing import List
-from openai import OpenAI
-from app.config import OPENAI_API_KEY, OPENAI_EMBED_MODEL
+import google.generativeai as genai
+from app.config import GEMINI_API_KEY, EMBED_MODEL
 
 
-client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
 
 
 def embed_text(text: str) -> List[float]:
     """
-    Generate embedding for text using OpenAI.
+    Generate embedding for text using Gemini embeddings.
     
     Args:
         text: Input text to embed
@@ -17,13 +18,14 @@ def embed_text(text: str) -> List[float]:
     Returns:
         List of floats representing the embedding vector
     """
-    if not client:
-        raise ValueError("OpenAI API key not configured. Set OPENAI_API_KEY environment variable.")
+    if not GEMINI_API_KEY:
+        raise ValueError("GEMINI_API_KEY not configured. Set GEMINI_API_KEY environment variable.")
     
-    response = client.embeddings.create(
-        model=OPENAI_EMBED_MODEL,
-        input=text
+    response = genai.embed_content(
+        model=EMBED_MODEL,
+        content=text,
+        task_type="SEMANTIC_SIMILARITY"
     )
     
-    return response.data[0].embedding
+    return response["embedding"]
 

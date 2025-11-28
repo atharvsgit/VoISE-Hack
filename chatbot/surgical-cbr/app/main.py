@@ -5,10 +5,6 @@ from app.config import DB_DIR
 from app.db import case_store
 from app.api import routes_cases, routes_query, routes_synthetic, routes_admin
 
-# Initialize database on startup
-case_store.init_sqlite()
-case_store.init_qdrant()
-
 app = FastAPI(
     title="Surgical CBR API",
     description="Case-Based Reasoning API for Surgical Pre-planning",
@@ -34,10 +30,15 @@ app.include_router(routes_admin.router, prefix="/api/v1")
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup."""
-    from app.config import DB_PATH, QDRANT_HOST, QDRANT_PORT
+    from app.config import DB_PATH, QDRANT_HOST, QDRANT_PORT, QDRANT_PATH
+    case_store.init_sqlite()
+    case_store.init_qdrant()
     print("Surgical CBR API started")
     print(f"Database: {DB_PATH}")
-    print(f"Qdrant: {QDRANT_HOST}:{QDRANT_PORT}")
+    if QDRANT_HOST:
+        print(f"Qdrant: {QDRANT_HOST}:{QDRANT_PORT}")
+    else:
+        print(f"Qdrant (embedded): {QDRANT_PATH}")
 
 
 @app.get("/")
