@@ -1,5 +1,4 @@
-# Surgical Planning System
-
+# CASEWISE
 A comprehensive web-based surgical planning and management system designed for healthcare professionals to streamline surgical case management, patient records, and clinical workflows.
 
 ## 🏥 Features
@@ -61,36 +60,56 @@ This creates an optimized production build in the build folder.
 
 ## 📁 Project Structure
 
-
 surgical-planning-app/
+
 ├── public/
+
 │   ├── index.html
 │   └── favicon.ico
+
 ├── src/
+
 │   ├── components/
+
 │   │   └── Navbar.jsx          # Navigation bar component
+
 │   ├── pages/
+
 │   │   ├── Dashboard.jsx       # Main dashboard
+
 │   │   ├── Patients.jsx        # Patient records
+
 │   │   ├── Calender.jsx        # Surgery calendar
+
 │   │   ├── NewCase.jsx         # Create new case form
+
 │   │   ├── Chat.jsx            # AI assistant
+
 │   │   ├── Reference.jsx       # Medical reference
+
 │   │   ├── Login.jsx           # Login page
+
 │   │   └── Register.jsx        # Registration page
+
 │   ├── data/
+
 │   │   └── mockData.js         # Mock data for development
+
 │   ├── lib/
+
 │   │   └── api.js              # API service layer
+
 │   ├── App.js                  # Main app component
+
 │   ├── App.css                 # App styles
+
 │   ├── index.js                # Entry point
+
 │   └── index.css               # Global styles
+
 ├── package.json
 ├── tailwind.config.js
 └── README.md
-
-
 ## 🛠 Technology Stack
 
 ### Frontend
